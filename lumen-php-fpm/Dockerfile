@@ -58,7 +58,7 @@ RUN apk --no-cache --update --repository http://dl-cdn.alpinelinux.org/alpine/v$
 && docker-php-ext-configure gd \
     --with-png-dir=/usr/include/ \
     --with-jpeg-dir=/usr/include/ 
-RUN apk --no-cache del libressl-dev rabbitmq-c-dev
+RUN apk --no-cache del libressl-dev rabbitmq-c-dev \
 && apk --no-cache add openssl-dev
 RUN pecl install \
     imagick-$IMAGICK_VERSION \
