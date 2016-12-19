@@ -17,7 +17,7 @@ ENV PHP_API_VERSION 20151012
 ENV NEWRELIC_VERSION 6.6.1.172
 ENV IMAGICK_VERSION=3.4.1
 ENV AMQP_VERSION=1.7.1
-ENV MONGODB_VERSION=1.1.8
+ENV MONGODB_VERSION=1.2.2
 
 # Download & Install New Relic
 RUN curl -#SL https://download.newrelic.com/php_agent/archive/$NEWRELIC_VERSION/newrelic-php5-$NEWRELIC_VERSION-linux-musl.tar.gz | tar xzf - \
@@ -57,8 +57,10 @@ RUN apk --no-cache --update --repository http://dl-cdn.alpinelinux.org/alpine/v$
 && docker-php-ext-configure intl \
 && docker-php-ext-configure gd \
     --with-png-dir=/usr/include/ \
-    --with-jpeg-dir=/usr/include/ \
-&& pecl install \
+    --with-jpeg-dir=/usr/include/ 
+RUN apk --no-cache del libressl-dev rabbitmq-c-dev
+&& apk --no-cache add openssl-dev
+RUN pecl install \
     imagick-$IMAGICK_VERSION \
     amqp-$AMQP_VERSION \
     mongodb-$MONGODB_VERSION \
@@ -82,8 +84,7 @@ RUN apk --no-cache --update --repository http://dl-cdn.alpinelinux.org/alpine/v$
     tar \
     autoconf \
     build-base \
-    libressl-dev \
-    rabbitmq-c-dev \
+    openssl-dev \
     libtool \
 && rm -rf /var/cache/apk/* /tmp/* ./newrelic-php5-$NEWRELIC_VERSION-linux-musl*
 
